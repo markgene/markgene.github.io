@@ -12,5 +12,23 @@
 	<atom:link href="http://markgene.github.io/publication/index.xml" rel="self" type="application/rss+xml" />
     
     
+    <item>
+      <title>Structure and evolution of the Fam20 kinases</title>
+      <link>http://markgene.github.io/publication/fam20-kinases/</link>
+      <pubDate>Fri, 23 Mar 2018 14:00:40 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/publication/fam20-kinases/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Genomics and evolution of protein phosphatases</title>
+      <link>http://markgene.github.io/publication/phosphatome/</link>
+      <pubDate>Tue, 11 Apr 2017 14:08:47 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/publication/phosphatome/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
