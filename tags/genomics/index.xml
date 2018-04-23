@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Genomics on Mark Chen</title>
+    <link>http://markgene.github.io/tags/genomics/</link>
+    <description>Recent content in Genomics on Mark Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Tue, 11 Apr 2017 14:08:47 -0500</lastBuildDate>
+    
+	<atom:link href="http://markgene.github.io/tags/genomics/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Genomics and evolution of protein phosphatases</title>
+      <link>http://markgene.github.io/publication/phosphatome/</link>
+      <pubDate>Tue, 11 Apr 2017 14:08:47 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/publication/phosphatome/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -69,8 +69,48 @@
     
     <url>
     
+      <loc>http://markgene.github.io/tags/evolution/</loc>
+      <lastmod>2017-04-11T14:08:47-05:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>http://markgene.github.io/tags/genomics/</loc>
+      <lastmod>2017-04-11T14:08:47-05:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>http://markgene.github.io/tags/kinases/</loc>
+      <lastmod>2018-03-23T14:00:40-05:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>http://markgene.github.io/</loc>
       <lastmod>2016-04-20T00:00:00-05:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>http://markgene.github.io/tags/phosphorylation/</loc>
+      <lastmod>2018-03-23T14:00:40-05:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -90,6 +130,7 @@
     <url>
     
       <loc>http://markgene.github.io/tags/</loc>
+      <lastmod>2017-04-11T14:08:47-05:00</lastmod>
       <priority>0</priority>
     </url>
     
