@@ -50,6 +50,33 @@
     
     <url>
     
+      <loc>http://markgene.github.io/publication/fic/</loc>
+      <lastmod>2011-07-27T14:08:47-05:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>http://markgene.github.io/publication/bocavirus/</loc>
+      <lastmod>2011-02-24T16:12:00-05:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>http://markgene.github.io/publication/cc/</loc>
+      <lastmod>2009-07-09T15:48:53-05:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>http://markgene.github.io/publication_types/2/</loc>
       <lastmod>2018-03-23T14:00:40-05:00</lastmod>
       <priority>0</priority>
@@ -61,6 +88,16 @@
     <url>
     
       <loc>http://markgene.github.io/categories/</loc>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>http://markgene.github.io/tags/coiled-coil/</loc>
+      <lastmod>2009-07-09T15:48:53-05:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -119,6 +156,16 @@
     
     <url>
     
+      <loc>http://markgene.github.io/tags/protein-functions/</loc>
+      <lastmod>2009-07-09T15:48:53-05:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>http://markgene.github.io/publication_types/</loc>
       <lastmod>2018-03-23T14:00:40-05:00</lastmod>
       <priority>0</priority>
@@ -130,7 +177,17 @@
     <url>
     
       <loc>http://markgene.github.io/tags/</loc>
-      <lastmod>2017-04-11T14:08:47-05:00</lastmod>
+      <lastmod>2009-07-09T15:48:53-05:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>http://markgene.github.io/tags/virus/</loc>
+      <lastmod>2011-02-24T16:12:00-05:00</lastmod>
       <priority>0</priority>
     </url>
     
