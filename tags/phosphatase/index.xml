@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Phosphatase on Mark Chen</title>
+    <link>http://markgene.github.io/tags/phosphatase/</link>
+    <description>Recent content in Phosphatase on Mark Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Tue, 19 Jul 2011 17:21:17 -0500</lastBuildDate>
+    
+	<atom:link href="http://markgene.github.io/tags/phosphatase/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Structural and functional analysis of PTPMT1, a phosphatase required for cardiolipin synthesis</title>
+      <link>http://markgene.github.io/publication/ptpmt1-structure/</link>
+      <pubDate>Tue, 19 Jul 2011 17:21:17 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/publication/ptpmt1-structure/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

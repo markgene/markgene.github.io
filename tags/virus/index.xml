@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Virus on Mark Chen</title>
+    <link>http://markgene.github.io/tags/virus/</link>
+    <description>Recent content in Virus on Mark Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Thu, 24 Feb 2011 17:16:21 -0500</lastBuildDate>
+    
+	<atom:link href="http://markgene.github.io/tags/virus/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Phylogenetic and recombination analysis of human bocavirus 2</title>
+      <link>http://markgene.github.io/publication/bocavirus/</link>
+      <pubDate>Thu, 24 Feb 2011 17:16:21 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/publication/bocavirus/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
