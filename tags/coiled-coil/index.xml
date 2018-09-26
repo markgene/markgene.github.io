@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Fri, 11 Sep 2009 17:08:31 -0500</lastBuildDate>
+    <lastBuildDate>Mon, 01 Oct 2012 17:30:32 -0500</lastBuildDate>
     
 	<atom:link href="http://markgene.github.io/tags/coiled-coil/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Coiled-coil networking shapes cell molecular machinery</title>
+      <link>http://markgene.github.io/publication/cc2012/</link>
+      <pubDate>Mon, 01 Oct 2012 17:30:32 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/publication/cc2012/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>A computationally guided protein-interaction screen uncovers coiled-coil interactions involved in vesicular trafficking</title>

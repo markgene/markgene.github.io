@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Fri, 11 Sep 2009 17:08:31 -0500</lastBuildDate>
+    <lastBuildDate>Mon, 01 Oct 2012 17:30:32 -0500</lastBuildDate>
     
 	<atom:link href="http://markgene.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,7 +15,7 @@
     <item>
       <title>Coiled coil</title>
       <link>http://markgene.github.io/tags/coiled-coil/</link>
-      <pubDate>Fri, 11 Sep 2009 17:08:31 -0500</pubDate>
+      <pubDate>Mon, 01 Oct 2012 17:30:32 -0500</pubDate>
       
       <guid>http://markgene.github.io/tags/coiled-coil/</guid>
       <description></description>
@@ -58,11 +58,11 @@
     </item>
     
     <item>
-      <title>Phosphatase</title>
-      <link>http://markgene.github.io/tags/phosphatase/</link>
-      <pubDate>Tue, 19 Jul 2011 17:21:17 -0500</pubDate>
+      <title>Phosphatases</title>
+      <link>http://markgene.github.io/tags/phosphatases/</link>
+      <pubDate>Sat, 01 Apr 2017 17:37:30 -0500</pubDate>
       
-      <guid>http://markgene.github.io/tags/phosphatase/</guid>
+      <guid>http://markgene.github.io/tags/phosphatases/</guid>
       <description></description>
     </item>
     
@@ -72,6 +72,15 @@
       <pubDate>Fri, 23 Mar 2018 14:00:40 -0500</pubDate>
       
       <guid>http://markgene.github.io/tags/phosphorylation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Proteasome</title>
+      <link>http://markgene.github.io/tags/proteasome/</link>
+      <pubDate>Sat, 01 Apr 2017 17:37:30 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/tags/proteasome/</guid>
       <description></description>
     </item>
     
