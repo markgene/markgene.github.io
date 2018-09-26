@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>PI3K on Mark Chen</title>
+    <link>http://markgene.github.io/tags/pi3k/</link>
+    <description>Recent content in PI3K on Mark Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Tue, 27 Jun 2017 17:52:32 -0500</lastBuildDate>
+    
+	<atom:link href="http://markgene.github.io/tags/pi3k/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Role of the E3 ubiquitin ligase RNF157 as a novel downstream effector linking PI3K and MAPK signaling to the cell cycle</title>
+      <link>http://markgene.github.io/publication/rnf157/</link>
+      <pubDate>Tue, 27 Jun 2017 17:52:32 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/publication/rnf157/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

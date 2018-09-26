@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Patent on Mark Chen</title>
+    <link>http://markgene.github.io/tags/patent/</link>
+    <description>Recent content in Patent on Mark Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Mon, 04 Jun 2007 17:50:35 -0500</lastBuildDate>
+    
+	<atom:link href="http://markgene.github.io/tags/patent/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>A simple method to improve life sciences patent searches using the cyberinfrastructure at the National Institutes of Health</title>
+      <link>http://markgene.github.io/publication/biomed-patent-search/</link>
+      <pubDate>Mon, 04 Jun 2007 17:50:35 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/publication/biomed-patent-search/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

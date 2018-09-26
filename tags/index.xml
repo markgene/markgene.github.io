@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Mon, 01 Oct 2012 17:30:32 -0500</lastBuildDate>
+    <lastBuildDate>Tue, 27 Jun 2017 17:52:32 -0500</lastBuildDate>
     
 	<atom:link href="http://markgene.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Cancer biology</title>
+      <link>http://markgene.github.io/tags/cancer-biology/</link>
+      <pubDate>Tue, 27 Jun 2017 17:52:32 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/tags/cancer-biology/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Coiled coil</title>
@@ -24,7 +33,7 @@
     <item>
       <title>Evolution</title>
       <link>http://markgene.github.io/tags/evolution/</link>
-      <pubDate>Tue, 11 Apr 2017 14:08:47 -0500</pubDate>
+      <pubDate>Tue, 27 Jun 2017 17:52:32 -0500</pubDate>
       
       <guid>http://markgene.github.io/tags/evolution/</guid>
       <description></description>
@@ -49,11 +58,38 @@
     </item>
     
     <item>
+      <title>MAPK</title>
+      <link>http://markgene.github.io/tags/mapk/</link>
+      <pubDate>Tue, 27 Jun 2017 17:52:32 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/tags/mapk/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PI3K</title>
+      <link>http://markgene.github.io/tags/pi3k/</link>
+      <pubDate>Tue, 27 Jun 2017 17:52:32 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/tags/pi3k/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>PTPMT1</title>
       <link>http://markgene.github.io/tags/ptpmt1/</link>
       <pubDate>Tue, 19 Jul 2011 17:21:17 -0500</pubDate>
       
       <guid>http://markgene.github.io/tags/ptpmt1/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Patent</title>
+      <link>http://markgene.github.io/tags/patent/</link>
+      <pubDate>Mon, 04 Jun 2007 17:50:35 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/tags/patent/</guid>
       <description></description>
     </item>
     
@@ -81,6 +117,15 @@
       <pubDate>Sat, 01 Apr 2017 17:37:30 -0500</pubDate>
       
       <guid>http://markgene.github.io/tags/proteasome/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Signaling pathways</title>
+      <link>http://markgene.github.io/tags/signaling-pathways/</link>
+      <pubDate>Tue, 27 Jun 2017 17:52:32 -0500</pubDate>
+      
+      <guid>http://markgene.github.io/tags/signaling-pathways/</guid>
       <description></description>
     </item>
     
