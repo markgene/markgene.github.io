@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Survival analysis</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Persister</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Analyses
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="PC9_time_course.html">PC9 cells trajectory analysis</a>
+    </li>
+    <li>
+      <a href="Survival.html">Survival analysis</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Survival analysis</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-12-07
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>MC015_Persister_public/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20211206code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20211206)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20211206code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20211206)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcommarkgeneMC015Persisterpublictree8cbdba4e01447cc683e5b571b2672da91defb615targetblank8cbdba4a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/markgene/MC015_Persister_public/tree/8cbdba4e01447cc683e5b571b2672da91defb615" target="_blank">8cbdba4</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcommarkgeneMC015Persisterpublictree8cbdba4e01447cc683e5b571b2672da91defb615targetblank8cbdba4a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/markgene/MC015_Persister_public/tree/8cbdba4e01447cc683e5b571b2672da91defb615" target="_blank">8cbdba4</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rproj.user/
+    Ignored:    output/.DS_Store
+    Ignored:    output/PC9_set6/
+
+Untracked files:
+    Untracked:  data/PC9_set6.merge.std.session_info.v6.Rda
+    Untracked:  data/Survival.session_info.v6.Rda
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/Survival.Rmd</code>) and HTML (<code>docs/Survival.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/markgene/MC015_Persister_public/blob/8cbdba4e01447cc683e5b571b2672da91defb615/analysis/Survival.Rmd" target="_blank">8cbdba4</a>
+</td>
+<td>
+Mark J Chen
+</td>
+<td>
+2021-12-07
+</td>
+<td>
+workflowr::wflow_publish(all = TRUE, force = TRUE, update = TRUE,
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/markgene/MC015_Persister_public/8cbdba4e01447cc683e5b571b2672da91defb615/docs/Survival.html" target="_blank">8cbdba4</a>
+</td>
+<td>
+Mark J Chen
+</td>
+<td>
+2021-12-07
+</td>
+<td>
+workflowr::wflow_publish(all = TRUE, force = TRUE, update = TRUE,
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/markgene/MC015_Persister_public/blob/75ecd397c34990594e50b5952adab413eba7fcf1/analysis/Survival.Rmd" target="_blank">75ecd39</a>
+</td>
+<td>
+Mark J Chen
+</td>
+<td>
+2021-12-07
+</td>
+<td>
+feat: add survival analysis.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/markgene/MC015_Persister_public/75ecd397c34990594e50b5952adab413eba7fcf1/docs/Survival.html" target="_blank">75ecd39</a>
+</td>
+<td>
+Mark J Chen
+</td>
+<td>
+2021-12-07
+</td>
+<td>
+feat: add survival analysis.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="setup-packages-parameters-and-paths" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Setup packages, parameters and paths</h1>
+<pre class="r"><code>library(tidyverse)
+library(survival)
+library(survminer)
+library(glue)
+library(ggplot2)
+library(patchwork)
+
+SURVIVAL_DIR &lt;- tempdir()</code></pre>
+</div>
+<div id="tcga-luad-egfr" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> TCGA LUAD EGFR</h1>
+<div id="download" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Download</h2>
+<pre class="r"><code>library(UCSCXenaTools)
+
+data(&quot;XenaData&quot;)
+dim(XenaData)
+
+TCGA_LUAD.xh &lt;- XenaGenerate(subset = XenaHostNames == &quot;tcgaHub&quot;) %&gt;% 
+  XenaFilter(filterDatasets = &quot;LUAD&quot;)
+
+TCGA_LUAD.xh@datasets
+
+TCGA_LUAD.HiSeqV2.xh &lt;- XenaFilter(TCGA_LUAD.xh,
+                                   filterDatasets = &quot;HiSeqV2$&quot;)
+TCGA_LUAD.Clin.xh &lt;- XenaFilter(TCGA_LUAD.xh,
+                                filterDatasets = &quot;clinicalMatrix&quot;)
+TCGA_LUAD.Survival.xh &lt;- XenaFilter(TCGA_LUAD.xh,
+                                    filterDatasets = &quot;survival&quot;)
+
+cache_data &lt;- function(xh, cache_dir) {
+  XenaQuery(xh) %&gt;%
+    XenaDownload(.,
+                 destdir = cache_dir,
+                 trans_slash = TRUE,
+                 force = FALSE)
+}
+
+._ &lt;-
+  lapply(
+    list(
+      clin = TCGA_LUAD.Clin.xh,
+      gex = TCGA_LUAD.HiSeqV2.xh,
+      survival = TCGA_LUAD.Survival.xh
+    ),
+    cache_data,
+    cache_dir = SURVIVAL_DIR
+  )</code></pre>
+</div>
+<div id="primary-tumors-with-egfr-mutation" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Primary tumors with EGFR mutation</h2>
+<pre class="r"><code>TCGA_LUADEGFR.Survival.df &lt;- read.table(file = file.path(SURVIVAL_DIR, &quot;survival__LUAD_survival.txt&quot;), sep = &quot;\t&quot;, header = TRUE)
+TCGA_LUADEGFR.Clin.df &lt;- read.table(file = file.path(SURVIVAL_DIR, &quot;TCGA.LUAD.sampleMap__LUAD_clinicalMatrix&quot;), sep = &quot;\t&quot;, header = TRUE)
+
+TCGA_LUADEGFR.HiSeqV2.df &lt;- read.table(file = file.path(SURVIVAL_DIR, &quot;TCGA.LUAD.sampleMap__HiSeqV2.gz&quot;), sep = &quot;\t&quot;, header = TRUE)
+
+# Primary tumor with EGFR mutation
+colnames(TCGA_LUADEGFR.Survival.df) %in% colnames(TCGA_LUADEGFR.Clin.df)
+TCGA_LUADEGFR.Survival.df %&gt;%
+  dplyr::inner_join(TCGA_LUADEGFR.Clin.df, by = c(&quot;sample&quot; = &quot;sampleID&quot;, &quot;X_PATIENT&quot; = &quot;X_PATIENT&quot;)) %&gt;%
+  dplyr::filter(sample_type == &quot;Primary Tumor&quot;) %&gt;%
+  dplyr::filter(egfr_mutation_performed == &quot;YES&quot;) -&gt; TCGA_LUADEGFR.Survival_Clin.df
+nrow(TCGA_LUADEGFR.Survival_Clin.df)
+TCGA_LUADEGFR.Survival_Clin.df %&gt;%
+  dplyr::count(EGFR, egfr_mutation_performed)</code></pre>
+</div>
+<div id="survival-analysis" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Survival analysis</h2>
+<p>Overall survival of HRI/EIF2AK1 levels of Q1 vs Q4.</p>
+<pre class="r"><code># Function
+TCGA_LUADEGFR.kmplot.gene &lt;- function(gene_symbol = &quot;EIF2AK1&quot;) {
+  TCGA_LUADEGFR.HiSeqV2.df %&gt;%
+    dplyr::filter(sample == gene_symbol) %&gt;%
+    tidyr::pivot_longer(cols = -sample,
+                        names_to = &quot;SampleID&quot;,
+                        values_to = &quot;gene_symbol&quot;) %&gt;%
+    dplyr::mutate(SampleID = stringr::str_replace_all(SampleID, &quot;\\.&quot;, &quot;-&quot;)) -&gt; TCGA_LUADEGFR.HiSeqV2.gene_symbol.df
+
+  # Run
+  days1yr &lt;- 365
+  days5yr &lt;- 365 * 4 + 366
+  TCGA_LUADEGFR.Survival_Clin.df %&gt;%
+    dplyr::inner_join(TCGA_LUADEGFR.HiSeqV2.gene_symbol.df,
+                      by = c(&quot;sample&quot; = &quot;SampleID&quot;)) %&gt;%
+    dplyr::filter(!is.na(OS) &amp; !is.na(OS.time)) %&gt;%
+    dplyr::mutate(gene_symbol_quantile = gtools::quantcut(gene_symbol, labels = c(&quot;Q1&quot;, &quot;Q2&quot;, &quot;Q3&quot;, &quot;Q4&quot;))) %&gt;%
+    dplyr::mutate(gene_symbol_level = ifelse(
+      gene_symbol_quantile == &quot;Q1&quot;,
+      &quot;Low&quot;,
+      ifelse(gene_symbol_quantile == &quot;Q4&quot;, &quot;High&quot;, &quot;Medium&quot;)
+    )) %&gt;%
+    dplyr::mutate(gene_symbol_level = forcats::fct_relevel(gene_symbol_level, &quot;Low&quot;, &quot;Medium&quot;, &quot;High&quot;)) %&gt;%
+    dplyr::filter(gene_symbol_level %in% c(&quot;Low&quot;, &quot;High&quot;)) %&gt;%
+    dplyr::mutate(gene_symbol_level = droplevels(gene_symbol_level)) -&gt;&gt; TCGA_LUADEGFR.Survival.gene_symbol.df
+  dim(TCGA_LUADEGFR.Survival.gene_symbol.df)
+  gene_symbol_level_count &lt;- table(TCGA_LUADEGFR.Survival.gene_symbol.df$gene_symbol_level)
+  
+  
+  TCGA_LUADEGFR.Survival.gene_symbol.surv &lt;&lt;-
+    survival::Surv(time = TCGA_LUADEGFR.Survival.gene_symbol.df$OS.time / 30, event = TCGA_LUADEGFR.Survival.gene_symbol.df$OS)
+  # summary(TCGA_LUADEGFR.Survival.gene_symbol.surv)
+  
+  TCGA_LUADEGFR.Survival.gene_symbol.cox &lt;- coxph(TCGA_LUADEGFR.Survival.gene_symbol.surv ~ gene_symbol_level,
+            data = TCGA_LUADEGFR.Survival.gene_symbol.df)
+  TCGA_LUADEGFR.Survival.gene_symbol.cox %&gt;%
+    summary() -&gt; cox_res
+  HR &lt;- signif(cox_res$coef[2], digits=2)
+  HR.confint.lower &lt;- signif(cox_res$conf.int[,&quot;lower .95&quot;], 2)
+  HR.confint.upper &lt;- signif(cox_res$conf.int[,&quot;upper .95&quot;], 2)
+  logrank_pval &lt;- signif(cox_res$sctest[&quot;pvalue&quot;], 2)
+  plt_title &lt;- glue(&quot;{gene_symbol}, 
+                 HR={HR} ({HR.confint.lower}-{HR.confint.upper}), 
+                 logrank p-value={logrank_pval}&quot;)
+  
+  TCGA_LUADEGFR.Survival.gene_symbol.sf &lt;&lt;-
+    survfit(TCGA_LUADEGFR.Survival.gene_symbol.surv ~ gene_symbol_level,
+            data = TCGA_LUADEGFR.Survival.gene_symbol.df)
+  # TCGA_LUADEGFR.Survival.gene_symbol.sf
+  message(&quot;Plot&quot;)
+  ggsurvplot(
+    fit = TCGA_LUADEGFR.Survival.gene_symbol.sf,
+    pval = FALSE,
+    pval.method = FALSE,
+    pval.size = 3,
+    # show p-value of log-rank test.
+    conf.int = TRUE,
+    # show confidence intervals for
+    # point estimaes of survival curves.
+    conf.int.style = &quot;step&quot;,
+    # customize style of confidence intervals
+    xlab = &quot;Time in months&quot;,
+    title = plt_title,
+    # customize X axis label.
+    break.time.by = 12,
+    # break X axis in time intervals by 200.
+    # ggtheme = theme_light(),
+    # customize plot and risk table with a theme.
+    risk.table = &quot;abs_pct&quot;,
+    # absolute number and percentage at risk.
+    risk.table.y.text.col = T,
+    # colour risk table text annotations.
+    risk.table.y.text = FALSE,
+    # show bars instead of names in text annotations
+    # in legend of risk table.
+    # ncensor.plot = TRUE,
+    # plot the number of censored subjects at time t
+    surv.median.line = &quot;none&quot;,
+    # add the median survival pointer.
+    legend.labs =
+      c(glue(&quot;Low (Q1) ({gene_symbol_level_count[&#39;Low&#39;]})&quot;),
+        glue(&quot;High (Q4) ({gene_symbol_level_count[&#39;High&#39;]})&quot;)),
+    # change legend labels.
+    # Specify median survival
+    # ggtheme = theme_bw(),
+    # Change ggplot2 theme
+    palette = c(&quot;grey10&quot;, &quot;goldenrod&quot;)
+  )
+}</code></pre>
+<p>EIF2AK1/HRI:</p>
+<pre class="r"><code>gene_symbols &lt;- c(&quot;EIF2AK1&quot;)
+gene_symbols[!gene_symbols %in% TCGA_LUADEGFR.HiSeqV2.df$sample]
+lapply(gene_symbols[1], function(gene_symbol) {
+  message(gene_symbol)
+  p &lt;- TCGA_LUADEGFR.kmplot.gene(gene_symbol = gene_symbol)
+  pdf_file &lt;- file.path(SURVIVAL_DIR, glue(&quot;TCGA_LUADEGFR.{gene_symbol}.Q1_Q4.pdf&quot;))
+  ggsave(
+    plot = p[[1]] + theme(plot.title = element_text(size = 11)),
+    filename = pdf_file,
+    height = 4,
+    width = 4.2
+  )
+})</code></pre>
+</div>
+</div>
+<div id="session-information" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Session information</h1>
+<pre class="r"><code>load(&quot;data/Survival.session_info.v6.Rda&quot;)
+Survival.session_info</code></pre>
+<pre><code>$platform
+$version
+[1] &quot;R version 4.0.5 (2021-03-31)&quot;
+
+$os
+[1] &quot;macOS Big Sur 10.16&quot;
+
+$system
+[1] &quot;x86_64, darwin13.4.0&quot;
+
+$ui
+[1] &quot;RStudio&quot;
+
+$language
+[1] &quot;(EN)&quot;
+
+$collate
+[1] &quot;en_US.UTF-8&quot;
+
+$ctype
+[1] &quot;en_US.UTF-8&quot;
+
+$tz
+[1] &quot;America/Chicago&quot;
+
+$date
+[1] &quot;2021-11-20&quot;
+
+attr(,&quot;class&quot;)
+[1] &quot;platform_info&quot;
+
+$packages
+                                  package ondiskversion loadedversion
+abind                               abind         1.4.5         1.4-5
+annotate                         annotate        1.68.0        1.68.0
+AnnotationDbi               AnnotationDbi        1.52.0        1.52.0
+assertthat                     assertthat         0.2.1         0.2.1
+backports                       backports         1.2.1         1.2.1
+Biobase                           Biobase        2.50.0        2.50.0
+BiocGenerics                 BiocGenerics        0.36.0        0.36.0
+BiocParallel                 BiocParallel        1.24.1        1.24.1
+bit                                   bit         4.0.4         4.0.4
+bit64                               bit64         4.0.5         4.0.5
+bitops                             bitops         1.0.7         1.0-7
+blob                                 blob         1.2.2         1.2.2
+broom                               broom         0.7.9         0.7.9
+cachem                             cachem         1.0.6         1.0.6
+callr                               callr         3.7.0         3.7.0
+car                                   car        3.0.11        3.0-11
+carData                           carData         3.0.4         3.0-4
+cellranger                     cellranger         1.1.0         1.1.0
+cli                                   cli         3.0.1         3.0.1
+colorspace                     colorspace         2.0.2         2.0-2
+crayon                             crayon         1.4.1         1.4.1
+curl                                 curl         4.3.2         4.3.2
+data.table                     data.table        1.14.0        1.14.0
+DBI                                   DBI         1.1.1         1.1.1
+dbplyr                             dbplyr         2.1.1         2.1.1
+DelayedArray                 DelayedArray        0.16.3        0.16.3
+digest                             digest        0.6.27        0.6.27
+dplyr                               dplyr         1.0.7         1.0.7
+ellipsis                         ellipsis         0.3.2         0.3.2
+evaluate                         evaluate          0.14          0.14
+fansi                               fansi         0.5.0         0.5.0
+farver                             farver         2.1.0         2.1.0
+fastmap                           fastmap         1.1.0         1.1.0
+forcats                           forcats         0.5.1         0.5.1
+foreign                           foreign        0.8.81        0.8-81
+fs                                     fs         1.5.0         1.5.0
+generics                         generics         0.1.0         0.1.0
+GenomeInfoDb                 GenomeInfoDb        1.26.4        1.26.4
+GenomeInfoDbData         GenomeInfoDbData         1.2.4         1.2.4
+GenomicRanges               GenomicRanges        1.42.0        1.42.0
+ggplot2                           ggplot2         3.3.5         3.3.5
+ggpubr                             ggpubr         0.4.0         0.4.0
+ggsignif                         ggsignif         0.6.2         0.6.2
+ggtext                             ggtext         0.1.1         0.1.1
+git2r                               git2r        0.28.0        0.28.0
+glue                                 glue         1.4.2         1.4.2
+graph                               graph        1.68.0        1.68.0
+gridExtra                       gridExtra           2.3           2.3
+gridtext                         gridtext         0.1.4         0.1.4
+GSEABase                         GSEABase        1.52.1        1.52.1
+GSVA                                 GSVA        1.38.2        1.38.2
+gtable                             gtable         0.3.0         0.3.0
+gtools                             gtools         3.9.2         3.9.2
+haven                               haven         2.4.3         2.4.3
+here                                 here         1.0.1         1.0.1
+hms                                   hms         1.1.0         1.1.0
+htmltools                       htmltools       0.5.1.1       0.5.1.1
+httpuv                             httpuv         1.6.2         1.6.2
+httr                                 httr         1.4.2         1.4.2
+IRanges                           IRanges        2.24.1        2.24.1
+jsonlite                         jsonlite         1.7.2         1.7.2
+km.ci                               km.ci         0.5.2         0.5-2
+KMsurv                             KMsurv         0.1.5         0.1-5
+knitr                               knitr          1.33          1.33
+labeling                         labeling         0.4.2         0.4.2
+later                               later         1.3.0         1.3.0
+lattice                           lattice       0.20.44       0.20-44
+lifecycle                       lifecycle         1.0.0         1.0.0
+lubridate                       lubridate        1.7.10        1.7.10
+magrittr                         magrittr         2.0.1         2.0.1
+markdown                         markdown           1.1           1.1
+Matrix                             Matrix         1.3.4         1.3-4
+MatrixGenerics             MatrixGenerics         1.2.1         1.2.1
+matrixStats                   matrixStats        0.60.1        0.60.1
+memoise                           memoise         2.0.0         2.0.0
+modelr                             modelr         0.1.8         0.1.8
+munsell                           munsell         0.5.0         0.5.0
+openxlsx                         openxlsx         4.2.4         4.2.4
+patchwork                       patchwork         1.1.1         1.1.1
+pillar                             pillar         1.6.2         1.6.2
+pkgconfig                       pkgconfig         2.0.3         2.0.3
+processx                         processx         3.5.2         3.5.2
+promises                         promises       1.2.0.1       1.2.0.1
+ps                                     ps         1.6.0         1.6.0
+purrr                               purrr         0.3.4         0.3.4
+R6                                     R6         2.5.1         2.5.1
+ragg                                 ragg         1.1.3         1.1.3
+Rcpp                                 Rcpp         1.0.7         1.0.7
+RCurl                               RCurl      1.98.1.4      1.98-1.4
+readr                               readr         2.0.1         2.0.1
+readxl                             readxl         1.3.1         1.3.1
+reprex                             reprex         2.0.1         2.0.1
+rio                                   rio        0.5.27        0.5.27
+rlang                               rlang        0.4.11        0.4.11
+rmarkdown                       rmarkdown          2.10          2.10
+rprojroot                       rprojroot         2.0.2         2.0.2
+RSQLite                           RSQLite         2.2.5         2.2.5
+rstatix                           rstatix         0.7.0         0.7.0
+rstudioapi                     rstudioapi          0.13          0.13
+rvest                               rvest         1.0.1         1.0.1
+S4Vectors                       S4Vectors        0.28.1        0.28.1
+scales                             scales         1.1.1         1.1.1
+sessioninfo                   sessioninfo         1.1.1         1.1.1
+stringi                           stringi         1.7.3         1.7.3
+stringr                           stringr         1.4.0         1.4.0
+SummarizedExperiment SummarizedExperiment        1.20.0        1.20.0
+survival                         survival        3.2.12        3.2-12
+survminer                       survminer         0.4.9         0.4.9
+survMisc                         survMisc         0.5.5         0.5.5
+systemfonts                   systemfonts         1.0.2         1.0.2
+textshaping                   textshaping         0.3.4         0.3.4
+tibble                             tibble         3.1.3         3.1.3
+tidyr                               tidyr         1.1.3         1.1.3
+tidyselect                     tidyselect         1.1.1         1.1.1
+tidyverse                       tidyverse         1.3.1         1.3.1
+tzdb                                 tzdb         0.1.2         0.1.2
+UCSCXenaTools               UCSCXenaTools         1.4.7         1.4.7
+utf8                                 utf8         1.2.2         1.2.2
+vctrs                               vctrs         0.3.8         0.3.8
+withr                               withr         2.4.2         2.4.2
+workflowr                       workflowr         1.6.2         1.6.2
+xfun                                 xfun          0.25          0.25
+XML                                   XML      3.99.0.7      3.99-0.7
+xml2                                 xml2         1.3.2         1.3.2
+xtable                             xtable         1.8.4         1.8-4
+XVector                           XVector        0.30.0        0.30.0
+yaml                                 yaml         2.2.1         2.2.1
+zip                                   zip         2.2.0         2.2.0
+zlibbioc                         zlibbioc        1.36.0        1.36.0
+zoo                                   zoo         1.8.9         1.8-9
+                                                                                       path
+abind                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/abind
+annotate                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/annotate
+AnnotationDbi               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/AnnotationDbi
+assertthat                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/assertthat
+backports                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/backports
+Biobase                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/Biobase
+BiocGenerics                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/BiocGenerics
+BiocParallel                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/BiocParallel
+bit                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/bit
+bit64                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/bit64
+bitops                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/bitops
+blob                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/blob
+broom                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/broom
+cachem                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/cachem
+callr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/callr
+car                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/car
+carData                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/carData
+cellranger                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/cellranger
+cli                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/cli
+colorspace                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/colorspace
+crayon                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/crayon
+curl                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/curl
+data.table                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/data.table
+DBI                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/DBI
+dbplyr                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/dbplyr
+DelayedArray                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/DelayedArray
+digest                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/digest
+dplyr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/dplyr
+ellipsis                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ellipsis
+evaluate                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/evaluate
+fansi                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/fansi
+farver                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/farver
+fastmap                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/fastmap
+forcats                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/forcats
+foreign                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/foreign
+fs                                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/fs
+generics                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/generics
+GenomeInfoDb                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/GenomeInfoDb
+GenomeInfoDbData         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/GenomeInfoDbData
+GenomicRanges               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/GenomicRanges
+ggplot2                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ggplot2
+ggpubr                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ggpubr
+ggsignif                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ggsignif
+ggtext                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ggtext
+git2r                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/git2r
+glue                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/glue
+graph                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/graph
+gridExtra                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/gridExtra
+gridtext                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/gridtext
+GSEABase                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/GSEABase
+GSVA                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/GSVA
+gtable                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/gtable
+gtools                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/gtools
+haven                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/haven
+here                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/here
+hms                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/hms
+htmltools                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/htmltools
+httpuv                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/httpuv
+httr                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/httr
+IRanges                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/IRanges
+jsonlite                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/jsonlite
+km.ci                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/km.ci
+KMsurv                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/KMsurv
+knitr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/knitr
+labeling                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/labeling
+later                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/later
+lattice                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/lattice
+lifecycle                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/lifecycle
+lubridate                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/lubridate
+magrittr                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/magrittr
+markdown                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/markdown
+Matrix                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/Matrix
+MatrixGenerics             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/MatrixGenerics
+matrixStats                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/matrixStats
+memoise                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/memoise
+modelr                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/modelr
+munsell                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/munsell
+openxlsx                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/openxlsx
+patchwork                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/patchwork
+pillar                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/pillar
+pkgconfig                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/pkgconfig
+processx                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/processx
+promises                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/promises
+ps                                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ps
+purrr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/purrr
+R6                                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/R6
+ragg                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ragg
+Rcpp                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/Rcpp
+RCurl                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/RCurl
+readr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/readr
+readxl                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/readxl
+reprex                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/reprex
+rio                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rio
+rlang                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rlang
+rmarkdown                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rmarkdown
+rprojroot                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rprojroot
+RSQLite                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/RSQLite
+rstatix                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rstatix
+rstudioapi                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rstudioapi
+rvest                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rvest
+S4Vectors                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/S4Vectors
+scales                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/scales
+sessioninfo                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/sessioninfo
+stringi                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/stringi
+stringr                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/stringr
+SummarizedExperiment /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/SummarizedExperiment
+survival                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/survival
+survminer                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/survminer
+survMisc                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/survMisc
+systemfonts                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/systemfonts
+textshaping                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/textshaping
+tibble                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/tibble
+tidyr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/tidyr
+tidyselect                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/tidyselect
+tidyverse                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/tidyverse
+tzdb                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/tzdb
+UCSCXenaTools               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/UCSCXenaTools
+utf8                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/utf8
+vctrs                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/vctrs
+withr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/withr
+workflowr                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/workflowr
+xfun                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/xfun
+XML                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/XML
+xml2                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/xml2
+xtable                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/xtable
+XVector                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/XVector
+yaml                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/yaml
+zip                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/zip
+zlibbioc                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/zlibbioc
+zoo                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/zoo
+                                                                                 loadedpath
+abind                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/abind
+annotate                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/annotate
+AnnotationDbi               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/AnnotationDbi
+assertthat                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/assertthat
+backports                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/backports
+Biobase                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/Biobase
+BiocGenerics                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/BiocGenerics
+BiocParallel                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/BiocParallel
+bit                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/bit
+bit64                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/bit64
+bitops                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/bitops
+blob                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/blob
+broom                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/broom
+cachem                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/cachem
+callr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/callr
+car                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/car
+carData                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/carData
+cellranger                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/cellranger
+cli                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/cli
+colorspace                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/colorspace
+crayon                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/crayon
+curl                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/curl
+data.table                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/data.table
+DBI                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/DBI
+dbplyr                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/dbplyr
+DelayedArray                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/DelayedArray
+digest                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/digest
+dplyr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/dplyr
+ellipsis                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ellipsis
+evaluate                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/evaluate
+fansi                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/fansi
+farver                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/farver
+fastmap                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/fastmap
+forcats                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/forcats
+foreign                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/foreign
+fs                                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/fs
+generics                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/generics
+GenomeInfoDb                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/GenomeInfoDb
+GenomeInfoDbData         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/GenomeInfoDbData
+GenomicRanges               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/GenomicRanges
+ggplot2                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ggplot2
+ggpubr                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ggpubr
+ggsignif                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ggsignif
+ggtext                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ggtext
+git2r                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/git2r
+glue                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/glue
+graph                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/graph
+gridExtra                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/gridExtra
+gridtext                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/gridtext
+GSEABase                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/GSEABase
+GSVA                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/GSVA
+gtable                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/gtable
+gtools                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/gtools
+haven                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/haven
+here                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/here
+hms                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/hms
+htmltools                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/htmltools
+httpuv                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/httpuv
+httr                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/httr
+IRanges                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/IRanges
+jsonlite                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/jsonlite
+km.ci                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/km.ci
+KMsurv                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/KMsurv
+knitr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/knitr
+labeling                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/labeling
+later                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/later
+lattice                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/lattice
+lifecycle                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/lifecycle
+lubridate                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/lubridate
+magrittr                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/magrittr
+markdown                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/markdown
+Matrix                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/Matrix
+MatrixGenerics             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/MatrixGenerics
+matrixStats                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/matrixStats
+memoise                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/memoise
+modelr                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/modelr
+munsell                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/munsell
+openxlsx                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/openxlsx
+patchwork                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/patchwork
+pillar                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/pillar
+pkgconfig                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/pkgconfig
+processx                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/processx
+promises                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/promises
+ps                                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ps
+purrr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/purrr
+R6                                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/R6
+ragg                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/ragg
+Rcpp                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/Rcpp
+RCurl                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/RCurl
+readr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/readr
+readxl                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/readxl
+reprex                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/reprex
+rio                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rio
+rlang                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rlang
+rmarkdown                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rmarkdown
+rprojroot                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rprojroot
+RSQLite                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/RSQLite
+rstatix                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rstatix
+rstudioapi                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rstudioapi
+rvest                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/rvest
+S4Vectors                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/S4Vectors
+scales                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/scales
+sessioninfo                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/sessioninfo
+stringi                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/stringi
+stringr                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/stringr
+SummarizedExperiment /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/SummarizedExperiment
+survival                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/survival
+survminer                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/survminer
+survMisc                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/survMisc
+systemfonts                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/systemfonts
+textshaping                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/textshaping
+tibble                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/tibble
+tidyr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/tidyr
+tidyselect                     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/tidyselect
+tidyverse                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/tidyverse
+tzdb                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/tzdb
+UCSCXenaTools               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/UCSCXenaTools
+utf8                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/utf8
+vctrs                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/vctrs
+withr                               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/withr
+workflowr                       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/workflowr
+xfun                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/xfun
+XML                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/XML
+xml2                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/xml2
+xtable                             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/xtable
+XVector                           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/XVector
+yaml                                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/yaml
+zip                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/zip
+zlibbioc                         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/zlibbioc
+zoo                                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library/zoo
+                     attached is_base       date         source md5ok
+abind                   FALSE   FALSE 2016-07-21 CRAN (R 4.0.5)    NA
+annotate                FALSE   FALSE 2020-10-27   Bioconductor    NA
+AnnotationDbi           FALSE   FALSE 2020-10-27   Bioconductor    NA
+assertthat              FALSE   FALSE 2019-03-21 CRAN (R 4.0.5)    NA
+backports               FALSE   FALSE 2020-12-09 CRAN (R 4.0.3)    NA
+Biobase                 FALSE   FALSE 2020-10-27   Bioconductor    NA
+BiocGenerics            FALSE   FALSE 2020-10-27   Bioconductor    NA
+BiocParallel            FALSE   FALSE 2020-11-06   Bioconductor    NA
+bit                     FALSE   FALSE 2020-08-04 CRAN (R 4.0.3)    NA
+bit64                   FALSE   FALSE 2020-08-30 CRAN (R 4.0.3)    NA
+bitops                  FALSE   FALSE 2021-04-24 CRAN (R 4.0.3)    NA
+blob                    FALSE   FALSE 2021-07-23 CRAN (R 4.0.5)    NA
+broom                   FALSE   FALSE 2021-07-27 CRAN (R 4.0.5)    NA
+cachem                  FALSE   FALSE 2021-08-19 CRAN (R 4.0.5)    NA
+callr                   FALSE   FALSE 2021-04-20 CRAN (R 4.0.3)    NA
+car                     FALSE   FALSE 2021-06-27 CRAN (R 4.0.5)    NA
+carData                 FALSE   FALSE 2020-05-22 CRAN (R 4.0.5)    NA
+cellranger              FALSE   FALSE 2016-07-27 CRAN (R 4.0.5)    NA
+cli                     FALSE   FALSE 2021-07-17 CRAN (R 4.0.5)    NA
+colorspace              FALSE   FALSE 2021-06-24 CRAN (R 4.0.5)    NA
+crayon                  FALSE   FALSE 2021-02-08 CRAN (R 4.0.3)    NA
+curl                    FALSE   FALSE 2021-06-23 CRAN (R 4.0.5)    NA
+data.table              FALSE   FALSE 2021-02-21 CRAN (R 4.0.5)    NA
+DBI                     FALSE   FALSE 2021-01-15 CRAN (R 4.0.3)    NA
+dbplyr                  FALSE   FALSE 2021-04-06 CRAN (R 4.0.3)    NA
+DelayedArray            FALSE   FALSE 2021-03-24   Bioconductor    NA
+digest                  FALSE   FALSE 2020-10-24 CRAN (R 4.0.3)    NA
+dplyr                    TRUE   FALSE 2021-06-18 CRAN (R 4.0.5)    NA
+ellipsis                FALSE   FALSE 2021-04-29 CRAN (R 4.0.3)    NA
+evaluate                FALSE   FALSE 2019-05-28 CRAN (R 4.0.5)    NA
+fansi                   FALSE   FALSE 2021-05-25 CRAN (R 4.0.5)    NA
+farver                  FALSE   FALSE 2021-02-28 CRAN (R 4.0.3)    NA
+fastmap                 FALSE   FALSE 2021-01-25 CRAN (R 4.0.5)    NA
+forcats                  TRUE   FALSE 2021-01-27 CRAN (R 4.0.3)    NA
+foreign                 FALSE   FALSE 2020-12-22 CRAN (R 4.0.5)    NA
+fs                      FALSE   FALSE 2020-07-31 CRAN (R 4.0.5)    NA
+generics                FALSE   FALSE 2020-10-31 CRAN (R 4.0.3)    NA
+GenomeInfoDb            FALSE   FALSE 2021-03-10   Bioconductor    NA
+GenomeInfoDbData        FALSE   FALSE 2021-09-13   Bioconductor    NA
+GenomicRanges           FALSE   FALSE 2020-10-27   Bioconductor    NA
+ggplot2                  TRUE   FALSE 2021-06-25 CRAN (R 4.0.5)    NA
+ggpubr                   TRUE   FALSE 2020-06-27 CRAN (R 4.0.5)    NA
+ggsignif                FALSE   FALSE 2021-06-14 CRAN (R 4.0.5)    NA
+ggtext                  FALSE   FALSE 2020-12-17 CRAN (R 4.0.5)    NA
+git2r                   FALSE   FALSE 2021-01-10 CRAN (R 4.0.5)    NA
+glue                     TRUE   FALSE 2020-08-27 CRAN (R 4.0.5)    NA
+graph                   FALSE   FALSE 2020-10-27   Bioconductor    NA
+gridExtra               FALSE   FALSE 2017-09-09 CRAN (R 4.0.5)    NA
+gridtext                FALSE   FALSE 2020-12-10 CRAN (R 4.0.5)    NA
+GSEABase                FALSE   FALSE 2020-12-11   Bioconductor    NA
+GSVA                     TRUE   FALSE 2021-02-09   Bioconductor    NA
+gtable                  FALSE   FALSE 2019-03-25 CRAN (R 4.0.5)    NA
+gtools                  FALSE   FALSE 2021-06-06 CRAN (R 4.0.5)    NA
+haven                   FALSE   FALSE 2021-08-04 CRAN (R 4.0.5)    NA
+here                    FALSE   FALSE 2020-12-13 CRAN (R 4.0.5)    NA
+hms                     FALSE   FALSE 2021-05-17 CRAN (R 4.0.5)    NA
+htmltools               FALSE   FALSE 2021-01-22 CRAN (R 4.0.5)    NA
+httpuv                  FALSE   FALSE 2021-08-18 CRAN (R 4.0.5)    NA
+httr                    FALSE   FALSE 2020-07-20 CRAN (R 4.0.5)    NA
+IRanges                 FALSE   FALSE 2020-12-12   Bioconductor    NA
+jsonlite                FALSE   FALSE 2020-12-09 CRAN (R 4.0.5)    NA
+km.ci                   FALSE   FALSE 2009-08-30 CRAN (R 4.0.5)    NA
+KMsurv                  FALSE   FALSE 2012-12-03 CRAN (R 4.0.5)    NA
+knitr                   FALSE   FALSE 2021-04-24 CRAN (R 4.0.3)    NA
+labeling                FALSE   FALSE 2020-10-20 CRAN (R 4.0.5)    NA
+later                   FALSE   FALSE 2021-08-18 CRAN (R 4.0.5)    NA
+lattice                 FALSE   FALSE 2021-05-02 CRAN (R 4.0.3)    NA
+lifecycle               FALSE   FALSE 2021-02-15 CRAN (R 4.0.3)    NA
+lubridate               FALSE   FALSE 2021-02-26 CRAN (R 4.0.3)    NA
+magrittr                FALSE   FALSE 2020-11-17 CRAN (R 4.0.5)    NA
+markdown                FALSE   FALSE 2019-08-07 CRAN (R 4.0.5)    NA
+Matrix                  FALSE   FALSE 2021-06-01 CRAN (R 4.0.5)    NA
+MatrixGenerics          FALSE   FALSE 2021-01-30   Bioconductor    NA
+matrixStats             FALSE   FALSE 2021-08-23 CRAN (R 4.0.5)    NA
+memoise                 FALSE   FALSE 2021-01-26 CRAN (R 4.0.3)    NA
+modelr                  FALSE   FALSE 2020-05-19 CRAN (R 4.0.5)    NA
+munsell                 FALSE   FALSE 2018-06-12 CRAN (R 4.0.5)    NA
+openxlsx                 TRUE   FALSE 2021-06-16 CRAN (R 4.0.5)    NA
+patchwork                TRUE   FALSE 2020-12-17 CRAN (R 4.0.5)    NA
+pillar                  FALSE   FALSE 2021-07-29 CRAN (R 4.0.5)    NA
+pkgconfig               FALSE   FALSE 2019-09-22 CRAN (R 4.0.5)    NA
+processx                FALSE   FALSE 2021-04-30 CRAN (R 4.0.3)    NA
+promises                FALSE   FALSE 2021-02-11 CRAN (R 4.0.5)    NA
+ps                      FALSE   FALSE 2021-02-28 CRAN (R 4.0.3)    NA
+purrr                    TRUE   FALSE 2020-04-17 CRAN (R 4.0.3)    NA
+R6                      FALSE   FALSE 2021-08-19 CRAN (R 4.0.5)    NA
+ragg                    FALSE   FALSE 2021-06-09 CRAN (R 4.0.5)    NA
+Rcpp                    FALSE   FALSE 2021-07-07 CRAN (R 4.0.5)    NA
+RCurl                   FALSE   FALSE 2021-08-17 CRAN (R 4.0.5)    NA
+readr                    TRUE   FALSE 2021-08-10 CRAN (R 4.0.5)    NA
+readxl                  FALSE   FALSE 2019-03-13 CRAN (R 4.0.5)    NA
+reprex                  FALSE   FALSE 2021-08-05 CRAN (R 4.0.5)    NA
+rio                     FALSE   FALSE 2021-06-21 CRAN (R 4.0.5)    NA
+rlang                   FALSE   FALSE 2021-04-30 CRAN (R 4.0.3)    NA
+rmarkdown               FALSE   FALSE 2021-08-06 CRAN (R 4.0.5)    NA
+rprojroot               FALSE   FALSE 2020-11-15 CRAN (R 4.0.3)    NA
+RSQLite                 FALSE   FALSE 2021-03-27 CRAN (R 4.0.3)    NA
+rstatix                 FALSE   FALSE 2021-02-13 CRAN (R 4.0.5)    NA
+rstudioapi              FALSE   FALSE 2020-11-12 CRAN (R 4.0.3)    NA
+rvest                   FALSE   FALSE 2021-07-26 CRAN (R 4.0.5)    NA
+S4Vectors               FALSE   FALSE 2020-12-09   Bioconductor    NA
+scales                  FALSE   FALSE 2020-05-11 CRAN (R 4.0.5)    NA
+sessioninfo             FALSE   FALSE 2018-11-05 CRAN (R 4.0.5)    NA
+stringi                 FALSE   FALSE 2021-07-16 CRAN (R 4.0.5)    NA
+stringr                  TRUE   FALSE 2019-02-10 CRAN (R 4.0.5)    NA
+SummarizedExperiment    FALSE   FALSE 2020-10-27   Bioconductor    NA
+survival                 TRUE   FALSE 2021-08-13 CRAN (R 4.0.5)    NA
+survminer                TRUE   FALSE 2021-03-09 CRAN (R 4.0.5)    NA
+survMisc                FALSE   FALSE 2018-07-05 CRAN (R 4.0.5)    NA
+systemfonts             FALSE   FALSE 2021-05-11 CRAN (R 4.0.3)    NA
+textshaping             FALSE   FALSE 2021-05-11 CRAN (R 4.0.5)    NA
+tibble                   TRUE   FALSE 2021-07-23 CRAN (R 4.0.5)    NA
+tidyr                    TRUE   FALSE 2021-03-03 CRAN (R 4.0.3)    NA
+tidyselect              FALSE   FALSE 2021-04-30 CRAN (R 4.0.3)    NA
+tidyverse                TRUE   FALSE 2021-04-15 CRAN (R 4.0.3)    NA
+tzdb                    FALSE   FALSE 2021-07-20 CRAN (R 4.0.5)    NA
+UCSCXenaTools            TRUE   FALSE 2021-09-15 CRAN (R 4.0.5)    NA
+utf8                    FALSE   FALSE 2021-07-24 CRAN (R 4.0.5)    NA
+vctrs                   FALSE   FALSE 2021-04-29 CRAN (R 4.0.5)    NA
+withr                   FALSE   FALSE 2021-04-18 CRAN (R 4.0.3)    NA
+workflowr                TRUE   FALSE 2020-04-30 CRAN (R 4.0.5)    NA
+xfun                    FALSE   FALSE 2021-08-06 CRAN (R 4.0.5)    NA
+XML                     FALSE   FALSE 2021-08-17 CRAN (R 4.0.5)    NA
+xml2                    FALSE   FALSE 2020-04-23 CRAN (R 4.0.5)    NA
+xtable                  FALSE   FALSE 2019-04-21 CRAN (R 4.0.5)    NA
+XVector                 FALSE   FALSE 2020-10-27   Bioconductor    NA
+yaml                    FALSE   FALSE 2020-02-01 CRAN (R 4.0.5)    NA
+zip                     FALSE   FALSE 2021-05-31 CRAN (R 4.0.5)    NA
+zlibbioc                FALSE   FALSE 2020-10-27   Bioconductor    NA
+zoo                     FALSE   FALSE 2021-03-09 CRAN (R 4.0.5)    NA
+                                                               library
+abind                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+annotate             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+AnnotationDbi        /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+assertthat           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+backports            /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+Biobase              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+BiocGenerics         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+BiocParallel         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+bit                  /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+bit64                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+bitops               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+blob                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+broom                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+cachem               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+callr                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+car                  /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+carData              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+cellranger           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+cli                  /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+colorspace           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+crayon               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+curl                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+data.table           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+DBI                  /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+dbplyr               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+DelayedArray         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+digest               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+dplyr                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+ellipsis             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+evaluate             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+fansi                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+farver               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+fastmap              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+forcats              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+foreign              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+fs                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+generics             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+GenomeInfoDb         /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+GenomeInfoDbData     /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+GenomicRanges        /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+ggplot2              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+ggpubr               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+ggsignif             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+ggtext               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+git2r                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+glue                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+graph                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+gridExtra            /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+gridtext             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+GSEABase             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+GSVA                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+gtable               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+gtools               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+haven                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+here                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+hms                  /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+htmltools            /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+httpuv               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+httr                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+IRanges              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+jsonlite             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+km.ci                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+KMsurv               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+knitr                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+labeling             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+later                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+lattice              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+lifecycle            /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+lubridate            /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+magrittr             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+markdown             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+Matrix               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+MatrixGenerics       /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+matrixStats          /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+memoise              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+modelr               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+munsell              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+openxlsx             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+patchwork            /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+pillar               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+pkgconfig            /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+processx             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+promises             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+ps                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+purrr                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+R6                   /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+ragg                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+Rcpp                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+RCurl                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+readr                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+readxl               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+reprex               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+rio                  /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+rlang                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+rmarkdown            /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+rprojroot            /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+RSQLite              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+rstatix              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+rstudioapi           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+rvest                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+S4Vectors            /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+scales               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+sessioninfo          /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+stringi              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+stringr              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+SummarizedExperiment /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+survival             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+survminer            /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+survMisc             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+systemfonts          /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+textshaping          /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+tibble               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+tidyr                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+tidyselect           /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+tidyverse            /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+tzdb                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+UCSCXenaTools        /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+utf8                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+vctrs                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+withr                /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+workflowr            /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+xfun                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+XML                  /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+xml2                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+xtable               /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+XVector              /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+yaml                 /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+zip                  /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+zlibbioc             /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+zoo                  /usr/local/anaconda3/envs/r4.1-py37/lib/R/library
+
+attr(,&quot;class&quot;)
+[1] &quot;session_info&quot;</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
